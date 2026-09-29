@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pilih Kursi & Reservasi - SkyPass Airlines</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a href="/" class="logo">✈️ SkyPass Airlines</a>
+      <div class="nav-links">
+        <a href="/">Cari Tiket</a>
+        <a href="/checkin.html">Web Check-In</a>
+        <button class="btn-reset" onclick="resetDatabase()">🔄 Reset DB Uji</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="alertContainer"></div>
+
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <div>
+          <h2>Pilih Kursi Kabin Pesawat</h2>
+          <p id="flightDetails" style="color: var(--text-muted);">Memuat informasi penerbangan...</p>
+        </div>
+        <a href="/" class="btn" style="background: #e2e8f0; color: #1e293b;">&larr; Ganti Jadwal</a>
+      </div>
+
+      <div class="cabin-container">
+        <div class="plane-cockpit">KOKPIT ✈️</div>
+        
+        <div id="seatGrid" class="seat-grid">
+          <p>Memuat denah kursi pesawat...</p>
+        </div>
+
+        <div class="seat-legend">
+          <div class="legend-item">
+            <div class="legend-box" style="background: #e0f2fe; border: 1px solid #7dd3fc;"></div>
+            <span>Tersedia (Available)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box" style="background: var(--success);"></div>
+            <span>Dipilih (Selected)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box" style="background: #fee2e2; border: 1px solid #fca5a5;"></div>
+            <span>Terpesan (Reserved)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-box" style="background: #cbd5e1; border: 1px solid #94a3b8;"></div>
+            <span>Check-In (Checked In)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Form Card -->
+    <div id="bookingCard" class="card" style="display: none;">
+      <h3>Formulir Data Penumpang & Pemesanan</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">
+        Kursi Terpilih: <strong id="selectedSeatBadge" style="font-size: 1.2rem; color: var(--primary);">Belum dipilih</strong>
+      </p>
+
+      <form id="bookingForm" onsubmit="submitBooking(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="passengerName">Nama Lengkap Penumpang</label>
+            <input type="text" id="passengerName" placeholder="Contoh: Budi Santoso" required>
+          </div>
+          <div class="form-group">
+            <label for="passengerEmail">Email Penumpang</label>
+            <input type="email" id="passengerEmail" placeholder="Contoh: budi.santoso@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="passengerPassport">No. KTP / Paspor</label>
+            <input type="text" id="passengerPassport" placeholder="Contoh: A12345678" required>
+          </div>
+          <div class="form-group" style="justify-content: flex-end;">
+            <button type="submit" class="btn btn-success" id="btnConfirmBooking">Konfirmasi & Terbitkan PNR</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Confirmation Modal / Card -->
+    <div id="confirmationCard" class="card" style="display: none; background: #ecfdf5; border-color: #6ee7b7;">
+      <h2 style="color: #065f46;">🎉 Reservasi Berhasil Dikonfirmasi!</h2>
+      <p style="margin: 0.5rem 0;">Simpan kode pemesanan (PNR) Anda untuk keperluan Web Check-in:</p>
+      <div style="background: white; border: 2px dashed #10b981; padding: 1.2rem; border-radius: 8px; margin: 1rem 0; text-align: center;">
+        <span style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase;">Kode Booking (PNR)</span>
+        <div id="confirmedPnr" style="font-size: 2.2rem; font-weight: 800; color: #047857; letter-spacing: 4px;">------</div>
+        <p id="confirmedDetails" style="color: #374151; margin-top: 0.5rem;"></p>
+      </div>
+
+      <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+        <a id="linkCheckin" href="/checkin.html" class="btn">Lanjut Web Check-In &rarr;</a>
+        <a href="/" class="btn" style="background: #e2e8f0; color: #1e293b;">Kembali ke Beranda</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>SkyPass Airlines Testing Platform &bull; Didesain khusus untuk <strong>System Testing dengan Apache JMeter</strong></p>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const flightNumber = urlParams.get('flightNumber') || 'AW-101';
+    let selectedSeat = null;
+
+    async function loadSeatMap() {
+      try {
+        const res = await fetch(`/api/flights/${flightNumber}/seats`);
+        const seats = await res.json();
+
+        if (!res.ok) {
+          document.getElementById('alertContainer').innerHTML = `<div class="alert alert-danger">${seats.error}</div>`;
+          return;
+        }
+
+        document.getElementById('flightDetails').innerHTML = `
+          Penerbangan: <strong>${flightNumber}</strong> &bull; Total Kapasitas: 30 Kursi (Konfigurasi 3-3)
+        `;
+
+        const grid = document.getElementById('seatGrid');
+        grid.innerHTML = '';
+
+        const rows = ['1', '2', '3', '4', '5'];
+        const leftCols = ['A', 'B', 'C'];
+        const rightCols = ['D', 'E', 'F'];
+
+        rows.forEach(r => {
+          const rowDiv = document.createElement('div');
+          rowDiv.className = 'seat-row';
+
+          // Row Label
+          const lbl = document.createElement('div');
+          lbl.className = 'row-label';
+          lbl.innerText = r;
+          rowDiv.appendChild(lbl);
+
+          // Left 3 seats (A, B, C)
+          leftCols.forEach(c => {
+            const sNum = `${r}${c}`;
+            const seatData = seats.find(s => s.seatNumber === sNum);
+            rowDiv.appendChild(createSeatElement(seatData));
+          });
+
+          // Aisle
+          const aisle = document.createElement('div');
+          aisle.className = 'aisle';
+          rowDiv.appendChild(aisle);
+
+          // Right 3 seats (D, E, F)
+          rightCols.forEach(c => {
+            const sNum = `${r}${c}`;
+            const seatData = seats.find(s => s.seatNumber === sNum);
+            rowDiv.appendChild(createSeatElement(seatData));
+          });
+
+          grid.appendChild(rowDiv);
+        });
+
+      } catch (err) {
+        document.getElementById('alertContainer').innerHTML = `<div class="alert alert-danger">Koneksi gagal: ${err.message}</div>`;
+      }
+    }
+
+    function createSeatElement(seat) {
+      const el = document.createElement('div');
+      el.className = `seat ${seat.status}`;
+      el.innerText = seat.seatNumber;
+      el.title = `Kursi ${seat.seatNumber} (${seat.status})`;
+
+      if (seat.status === 'available') {
+        el.onclick = () => selectSeat(seat.seatNumber, el);
+      }
+      return el;
+    }
+
+    function selectSeat(seatNumber, element) {
+      document.querySelectorAll('.seat.selected').forEach(s => {
+        s.classList.remove('selected');
+        s.classList.add('available');
+      });
+
+      element.classList.remove('available');
+      element.classList.add('selected');
+      selectedSeat = seatNumber;
+
+      document.getElementById('bookingCard').style.display = 'block';
+      document.getElementById('selectedSeatBadge').innerText = seatNumber;
+      document.getElementById('bookingCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function submitBooking(e) {
+      e.preventDefault();
+      if (!selectedSeat) {
+        alert('Silakan pilih nomor kursi terlebih dahulu');
+        return;
+      }
+
+      const passengerName = document.getElementById('passengerName').value;
+      const passengerEmail = document.getElementById('passengerEmail').value;
+      const passengerPassport = document.getElementById('passengerPassport').value;
+
+      try {
+        const res = await fetch('/api/bookings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            flightNumber,
+            passengerName,
+            passengerEmail,
+            passengerPassport,
+            seatNumber: selectedSeat
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          alert('❌ Gagal reservasi: ' + data.error);
+          return;
+        }
+
+        // Show confirmation
+        document.getElementById('bookingCard').style.display = 'none';
+        document.getElementById('confirmationCard').style.display = 'block';
+        document.getElementById('confirmedPnr').innerText = data.pnr;
+        document.getElementById('confirmedDetails').innerHTML = `
+          Penumpang: <strong>${data.passengerName}</strong> &bull; Kursi: <strong>${data.seatNumber}</strong> &bull; Rute: <strong>${data.origin} &rarr; ${data.destination}</strong>
+        `;
+        document.getElementById('linkCheckin').href = `/checkin.html?pnr=${data.pnr}&email=${encodeURIComponent(data.passengerEmail)}`;
+        document.getElementById('confirmationCard').scrollIntoView({ behavior: 'smooth' });
+
+        // Reload seat map to show updated status
+        loadSeatMap();
+
+      } catch (err) {
+        alert('Terjadi kesalahan jaringan: ' + err.message);
+      }
+    }
+
+    loadSeatMap();
+  </script>
+</body>
+</html>

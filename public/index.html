@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyPass Airlines - Sistem Reservasi Penerbangan</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a href="/" class="logo">✈️ SkyPass Airlines</a>
+      <div class="nav-links">
+        <a href="/" class="active">Cari Tiket</a>
+        <a href="/checkin.html">Web Check-In</a>
+        <button id="btnResetDB" class="btn-reset" onclick="resetDatabase()">🔄 Reset DB Uji</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>🔍 Cari Jadwal Penerbangan</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">
+        Pilih rute kota asal dan tujuan untuk melihat ketersediaan jadwal dan kuota kursi pesawat.
+      </p>
+
+      <form id="searchForm" onsubmit="handleSearch(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="originSelect">Kota Asal (Origin)</label>
+            <select id="originSelect" required>
+              <option value="CGK">Jakarta (CGK) - Soekarno Hatta</option>
+              <option value="SUB">Surabaya (SUB) - Juanda</option>
+              <option value="DPS">Bali (DPS) - Ngurah Rai</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="destSelect">Kota Tujuan (Destination)</label>
+            <select id="destSelect" required>
+              <option value="DPS" selected>Bali (DPS) - Ngurah Rai</option>
+              <option value="SUB">Surabaya (SUB) - Juanda</option>
+              <option value="CGK">Jakarta (CGK) - Soekarno Hatta</option>
+            </select>
+          </div>
+          <div class="form-group" style="justify-content: flex-end;">
+            <button type="submit" class="btn">Cari Penerbangan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div id="resultsSection">
+      <h3>Hasil Penerbangan Tersedia</h3>
+      <div id="flightList">
+        <p style="color: var(--text-muted);">Tekan tombol "Cari Penerbangan" untuk menampilkan jadwal.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>SkyPass Airlines Testing Platform &bull; Didesain khusus untuk <strong>System Testing dengan Apache JMeter</strong></p>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

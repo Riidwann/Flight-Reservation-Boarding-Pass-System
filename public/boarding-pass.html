@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Boarding Pass - SkyPass Airlines</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a href="/" class="logo">✈️ SkyPass Airlines</a>
+      <div class="nav-links">
+        <a href="/">Cari Tiket</a>
+        <a href="/checkin.html">Web Check-In</a>
+        <button class="btn-reset" onclick="resetDatabase()">🔄 Reset DB Uji</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="statusContainer" style="max-width: 650px; margin: 0 auto;"></div>
+
+    <div id="ticketContainer" class="boarding-pass-ticket" style="display: none;">
+      <div class="bp-header">
+        <div>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">SkyPass Airlines Boarding Pass</span>
+          <div style="font-size: 1.4rem; font-weight: 800;" id="bpFlight">AW-101</div>
+        </div>
+        <div style="text-align: right;">
+          <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;" id="bpStatus">VALID</span>
+        </div>
+      </div>
+
+      <div class="bp-body">
+        <div>
+          <div class="bp-field">
+            <div class="label">Nama Penumpang</div>
+            <div class="val" id="bpPassengerName">--</div>
+          </div>
+
+          <div style="display: flex; gap: 2rem;">
+            <div class="bp-field">
+              <div class="label">Rute Asal</div>
+              <div class="val" id="bpOrigin">--</div>
+            </div>
+            <div class="bp-field">
+              <div class="label">Rute Tujuan</div>
+              <div class="val" id="bpDestination">--</div>
+            </div>
+          </div>
+
+          <div class="bp-field">
+            <div class="label">Kode Booking (PNR)</div>
+            <div class="val" id="bpPnr" style="color: var(--accent); letter-spacing: 2px;">--</div>
+          </div>
+        </div>
+
+        <div style="border-left: 1px solid var(--border); padding-left: 1.5rem; text-align: center;">
+          <div class="bp-field">
+            <div class="label">Nomor Kursi</div>
+            <div class="val" id="bpSeat" style="font-size: 2.2rem; color: #047857;">--</div>
+          </div>
+
+          <div class="bp-field">
+            <div class="label">Pintu (Gate)</div>
+            <div class="val" id="bpGate" style="font-size: 1.4rem; color: var(--primary);">--</div>
+          </div>
+
+          <div class="bp-field">
+            <div class="label">Jam Boarding</div>
+            <div class="val" id="bpBoardingTime" style="color: #b91c1c;">--</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bp-barcode">
+        <div class="barcode-strip"></div>
+        <div style="font-family: monospace; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;" id="bpBarcodeHash">
+          SKYPASS-HASH
+        </div>
+      </div>
+    </div>
+
+    <div id="actionsContainer" style="max-width: 650px; margin: 1.5rem auto; display: none; text-align: center; gap: 1rem; justify-content: center;">
+      <button onclick="window.print()" class="btn">🖨️ Cetak Boarding Pass</button>
+      <button onclick="cancelCurrentBooking()" class="btn btn-danger">❌ Batalkan Reservasi (Cancel Booking)</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>SkyPass Airlines Testing Platform &bull; Didesain khusus untuk <strong>System Testing dengan Apache JMeter</strong></p>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const pnr = urlParams.get('pnr');
+
+    async function loadBoardingPass() {
+      if (!pnr) {
+        document.getElementById('statusContainer').innerHTML = `
+          <div class="alert alert-danger">Parameter PNR tidak ditemukan. Silakan lakukan check-in terlebih dahulu di <a href="/checkin.html">Halaman Web Check-in</a>.</div>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/boarding-pass/${pnr}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          document.getElementById('statusContainer').innerHTML = `
+            <div class="alert alert-danger">⚠️ ${data.error}</div>
+            <div style="text-align: center; margin-top: 1rem;"><a href="/checkin.html" class="btn">Menuju Web Check-In</a></div>
+          `;
+          return;
+        }
+
+        document.getElementById('bpFlight').innerText = data.flightNumber;
+        document.getElementById('bpStatus').innerText = data.status;
+        document.getElementById('bpPassengerName').innerText = data.passengerName;
+        document.getElementById('bpOrigin').innerText = data.origin;
+        document.getElementById('bpDestination').innerText = data.destination;
+        document.getElementById('bpPnr').innerText = data.pnr;
+        document.getElementById('bpSeat').innerText = data.seatNumber;
+        document.getElementById('bpGate').innerText = data.gate;
+        document.getElementById('bpBoardingTime').innerText = data.boardingTime;
+        document.getElementById('bpBarcodeHash').innerText = data.barcodeHash;
+
+        document.getElementById('ticketContainer').style.display = 'block';
+        document.getElementById('actionsContainer').style.display = 'flex';
+
+      } catch (err) {
+        document.getElementById('statusContainer').innerHTML = `
+          <div class="alert alert-danger">Koneksi gagal: ${err.message}</div>`;
+      }
+    }
+
+    async function cancelCurrentBooking() {
+      if (!confirm(`Apakah Anda yakin ingin membatalkan pemesanan dengan PNR ${pnr}? Kursi akan dilepaskan kembali ke sistem.`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/bookings/${pnr}/cancel`, { method: 'POST' });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert('Gagal membatalkan: ' + data.error);
+          return;
+        }
+
+        alert('✅ ' + data.message);
+        window.location.href = '/';
+      } catch (err) {
+        alert('Koneksi gagal: ' + err.message);
+      }
+    }
+
+    loadBoardingPass();
+  </script>
+</body>
+</html>

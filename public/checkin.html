@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Check-In - SkyPass Airlines</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a href="/" class="logo">✈️ SkyPass Airlines</a>
+      <div class="nav-links">
+        <a href="/">Cari Tiket</a>
+        <a href="/checkin.html" class="active">Web Check-In</a>
+        <button class="btn-reset" onclick="resetDatabase()">🔄 Reset DB Uji</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="card" style="max-width: 600px; margin: 2rem auto;">
+      <h2>🎫 Web Check-In Online</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+        Masukkan 6-karakter Kode Booking (PNR) dan email penumpang terdaftar untuk menerbitkan Digital Boarding Pass.
+      </p>
+
+      <div id="checkinAlert"></div>
+
+      <form id="checkinForm" onsubmit="handleCheckin(event)">
+        <div class="form-group" style="margin-bottom: 1.2rem;">
+          <label for="pnrInput">Kode Booking (PNR)</label>
+          <input type="text" id="pnrInput" placeholder="Contoh: SK7X2A" style="font-size: 1.2rem; text-transform: uppercase; font-weight: 700; letter-spacing: 2px;" required maxlength="6">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label for="emailInput">Email Terdaftar Penumpang</label>
+          <input type="email" id="emailInput" placeholder="Contoh: budi.santoso@example.com" required>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%; font-size: 1.05rem;" id="btnSubmitCheckin">
+          Verifikasi & Terbitkan Boarding Pass
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>SkyPass Airlines Testing Platform &bull; Didesain khusus untuk <strong>System Testing dengan Apache JMeter</strong></p>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const prefillPnr = urlParams.get('pnr');
+    const prefillEmail = urlParams.get('email');
+
+    if (prefillPnr) document.getElementById('pnrInput').value = prefillPnr;
+    if (prefillEmail) document.getElementById('emailInput').value = prefillEmail;
+
+    async function handleCheckin(e) {
+      e.preventDefault();
+      const pnr = document.getElementById('pnrInput').value.trim().toUpperCase();
+      const passengerEmail = document.getElementById('emailInput').value.trim();
+      const alertBox = document.getElementById('checkinAlert');
+
+      alertBox.innerHTML = '<p>Memproses verifikasi check-in...</p>';
+
+      try {
+        const res = await fetch('/api/check-in', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pnr, passengerEmail })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alertBox.innerHTML = `<div class="alert alert-danger">⚠️ ${data.error}</div>`;
+          return;
+        }
+
+        alertBox.innerHTML = `<div class="alert alert-success">✅ Check-in Berhasil! Mengalihkan ke Boarding Pass...</div>`;
+        setTimeout(() => {
+          window.location.href = `/boarding-pass.html?pnr=${pnr}`;
+        }, 1000);
+
+      } catch (err) {
+        alertBox.innerHTML = `<div class="alert alert-danger">Koneksi gagal: ${err.message}</div>`;
+      }
+    }
+  </script>
+</body>
+</html>
