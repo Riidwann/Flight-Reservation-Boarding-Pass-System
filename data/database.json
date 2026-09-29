@@ -1,0 +1,581 @@
+{
+  "flights": [
+    {
+      "flightNumber": "AW-101",
+      "airline": "SkyPass Airlines",
+      "origin": "CGK",
+      "destination": "DPS",
+      "departureTime": "08:00",
+      "arrivalTime": "10:50",
+      "price": 1250000,
+      "totalSeats": 30,
+      "availableSeats": 30
+    },
+    {
+      "flightNumber": "AW-102",
+      "airline": "SkyPass Airlines",
+      "origin": "CGK",
+      "destination": "SUB",
+      "departureTime": "09:30",
+      "arrivalTime": "11:00",
+      "price": 850000,
+      "totalSeats": 30,
+      "availableSeats": 30
+    },
+    {
+      "flightNumber": "AW-103",
+      "airline": "SkyPass Airlines",
+      "origin": "SUB",
+      "destination": "DPS",
+      "departureTime": "13:00",
+      "arrivalTime": "14:15",
+      "price": 650000,
+      "totalSeats": 30,
+      "availableSeats": 30
+    }
+  ],
+  "seats": [
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "1A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "1B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "1C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "1D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "1E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "1F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "2A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "2B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "2C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "2D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "2E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "2F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "3A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "3B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "3C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "3D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "3E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "3F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "4A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "4B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "4C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "4D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "4E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "4F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "5A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "5B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "5C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "5D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "5E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-101",
+      "seatNumber": "5F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "1A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "1B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "1C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "1D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "1E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "1F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "2A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "2B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "2C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "2D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "2E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "2F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "3A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "3B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "3C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "3D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "3E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "3F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "4A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "4B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "4C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "4D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "4E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "4F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "5A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "5B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "5C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "5D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "5E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-102",
+      "seatNumber": "5F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "1A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "1B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "1C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "1D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "1E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "1F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "2A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "2B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "2C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "2D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "2E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "2F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "3A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "3B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "3C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "3D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "3E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "3F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "4A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "4B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "4C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "4D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "4E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "4F",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "5A",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "5B",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "5C",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "5D",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "5E",
+      "status": "available",
+      "passengerName": null
+    },
+    {
+      "flightNumber": "AW-103",
+      "seatNumber": "5F",
+      "status": "available",
+      "passengerName": null
+    }
+  ],
+  "bookings": [],
+  "boardingPasses": []
+}

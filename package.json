@@ -1,0 +1,23 @@
+{
+  "name": "skypass-airlines-jmeter-test",
+  "version": "1.0.0",
+  "description": "SkyPass Airlines - Flight Reservation & Boarding Pass System for JMeter System Testing",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/api.test.js",
+    "test:db": "node test/db.test.js"
+  },
+  "keywords": [
+    "jmeter",
+    "system-testing",
+    "flight-reservation",
+    "express",
+    "node"
+  ],
+  "author": "SkyPass Team",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
