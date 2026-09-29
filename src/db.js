@@ -48,6 +48,7 @@ class Database {
 
   resetDatabase() {
     const flights = [
+      // CGK -> DPS (Jakarta to Bali)
       {
         flightNumber: 'AW-101',
         airline: 'SkyPass Airlines',
@@ -60,6 +61,87 @@ class Database {
         availableSeats: 30
       },
       {
+        flightNumber: 'AW-105',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'DPS',
+        departureTime: '12:30',
+        arrivalTime: '15:20',
+        price: 1180000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-107',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'DPS',
+        departureTime: '17:15',
+        arrivalTime: '20:05',
+        price: 1340000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-109',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'DPS',
+        departureTime: '20:30',
+        arrivalTime: '23:20',
+        price: 1090000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+
+      // DPS -> CGK (Bali to Jakarta)
+      {
+        flightNumber: 'AW-104',
+        airline: 'SkyPass Airlines',
+        origin: 'DPS',
+        destination: 'CGK',
+        departureTime: '07:00',
+        arrivalTime: '07:50',
+        price: 1210000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-108',
+        airline: 'SkyPass Airlines',
+        origin: 'DPS',
+        destination: 'CGK',
+        departureTime: '11:45',
+        arrivalTime: '12:35',
+        price: 1150000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-110',
+        airline: 'SkyPass Airlines',
+        origin: 'DPS',
+        destination: 'CGK',
+        departureTime: '16:30',
+        arrivalTime: '17:20',
+        price: 1280000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-112',
+        airline: 'SkyPass Airlines',
+        origin: 'DPS',
+        destination: 'CGK',
+        departureTime: '21:00',
+        arrivalTime: '21:50',
+        price: 1120000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+
+      // CGK -> SUB (Jakarta to Surabaya)
+      {
         flightNumber: 'AW-102',
         airline: 'SkyPass Airlines',
         origin: 'CGK',
@@ -71,6 +153,65 @@ class Database {
         availableSeats: 30
       },
       {
+        flightNumber: 'AW-114',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'SUB',
+        departureTime: '15:00',
+        arrivalTime: '16:30',
+        price: 820000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-116',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'SUB',
+        departureTime: '19:45',
+        arrivalTime: '21:15',
+        price: 790000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+
+      // SUB -> CGK (Surabaya to Jakarta)
+      {
+        flightNumber: 'AW-115',
+        airline: 'SkyPass Airlines',
+        origin: 'SUB',
+        destination: 'CGK',
+        departureTime: '06:30',
+        arrivalTime: '08:00',
+        price: 860000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-117',
+        airline: 'SkyPass Airlines',
+        origin: 'SUB',
+        destination: 'CGK',
+        departureTime: '12:15',
+        arrivalTime: '13:45',
+        price: 830000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-119',
+        airline: 'SkyPass Airlines',
+        origin: 'SUB',
+        destination: 'CGK',
+        departureTime: '17:30',
+        arrivalTime: '19:00',
+        price: 890000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+
+      // SUB -> DPS (Surabaya to Bali)
+      {
         flightNumber: 'AW-103',
         airline: 'SkyPass Airlines',
         origin: 'SUB',
@@ -78,6 +219,179 @@ class Database {
         departureTime: '13:00',
         arrivalTime: '14:15',
         price: 650000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-121',
+        airline: 'SkyPass Airlines',
+        origin: 'SUB',
+        destination: 'DPS',
+        departureTime: '18:00',
+        arrivalTime: '19:15',
+        price: 670000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+
+      // DPS -> SUB (Bali to Surabaya)
+      {
+        flightNumber: 'AW-122',
+        airline: 'SkyPass Airlines',
+        origin: 'DPS',
+        destination: 'SUB',
+        departureTime: '08:30',
+        arrivalTime: '09:45',
+        price: 640000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-124',
+        airline: 'SkyPass Airlines',
+        origin: 'DPS',
+        destination: 'SUB',
+        departureTime: '15:15',
+        arrivalTime: '16:30',
+        price: 660000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+
+      // CGK <-> JOG (Jakarta to Yogyakarta)
+      {
+        flightNumber: 'AW-201',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'JOG',
+        departureTime: '07:15',
+        arrivalTime: '08:25',
+        price: 720000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-203',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'JOG',
+        departureTime: '14:10',
+        arrivalTime: '15:20',
+        price: 690000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-202',
+        airline: 'SkyPass Airlines',
+        origin: 'JOG',
+        destination: 'CGK',
+        departureTime: '09:15',
+        arrivalTime: '10:25',
+        price: 710000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-204',
+        airline: 'SkyPass Airlines',
+        origin: 'JOG',
+        destination: 'CGK',
+        departureTime: '16:40',
+        arrivalTime: '17:50',
+        price: 740000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+
+      // CGK <-> KNO (Jakarta to Medan Kualanamu)
+      {
+        flightNumber: 'AW-301',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'KNO',
+        departureTime: '08:45',
+        arrivalTime: '11:05',
+        price: 1450000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-303',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'KNO',
+        departureTime: '16:15',
+        arrivalTime: '18:35',
+        price: 1480000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-302',
+        airline: 'SkyPass Airlines',
+        origin: 'KNO',
+        destination: 'CGK',
+        departureTime: '11:50',
+        arrivalTime: '14:10',
+        price: 1420000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-304',
+        airline: 'SkyPass Airlines',
+        origin: 'KNO',
+        destination: 'CGK',
+        departureTime: '19:20',
+        arrivalTime: '21:40',
+        price: 1390000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+
+      // CGK <-> UPG (Jakarta to Makassar)
+      {
+        flightNumber: 'AW-401',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'UPG',
+        departureTime: '06:00',
+        arrivalTime: '09:25',
+        price: 1580000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-403',
+        airline: 'SkyPass Airlines',
+        origin: 'CGK',
+        destination: 'UPG',
+        departureTime: '13:30',
+        arrivalTime: '16:55',
+        price: 1520000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-402',
+        airline: 'SkyPass Airlines',
+        origin: 'UPG',
+        destination: 'CGK',
+        departureTime: '10:15',
+        arrivalTime: '11:40',
+        price: 1540000,
+        totalSeats: 30,
+        availableSeats: 30
+      },
+      {
+        flightNumber: 'AW-404',
+        airline: 'SkyPass Airlines',
+        origin: 'UPG',
+        destination: 'CGK',
+        departureTime: '17:45',
+        arrivalTime: '19:10',
+        price: 1590000,
         totalSeats: 30,
         availableSeats: 30
       }

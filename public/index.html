@@ -3,27 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SkyPass Airlines - Sistem Reservasi Penerbangan</title>
+  <title>SkyPass Airlines - Reservasi Tiket Pesawat & Check-In</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+  <!-- Header & Navigation -->
   <header>
     <div class="navbar">
-      <a href="/" class="logo">✈️ SkyPass Airlines</a>
-      <div class="nav-links">
-        <a href="/" class="active">Cari Tiket</a>
-        <a href="/checkin.html">Web Check-In</a>
-        <button id="btnResetDB" class="btn-reset" onclick="resetDatabase()">🔄 Reset DB Uji</button>
+      <a href="/" class="logo">
+        <span class="logo-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+          </svg>
+        </span>
+        <div class="logo-text">
+          <span class="logo-brand">SkyPass Airlines</span>
+          <span class="logo-tag">Official Flight Booking</span>
+        </div>
+      </a>
+
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="/" class="active">
+            <span>🔍</span> Cari Tiket
+          </a>
+          <a href="/checkin.html">
+            <span>🎫</span> Check-In
+          </a>
+        </div>
       </div>
     </div>
   </header>
 
+  <!-- Main Content -->
   <main>
-    <div class="card">
-      <h2>🔍 Cari Jadwal Penerbangan</h2>
-      <p style="color: var(--text-muted); margin-bottom: 1rem;">
-        Pilih rute kota asal dan tujuan untuk melihat ketersediaan jadwal dan kuota kursi pesawat.
+    <!-- Step Wizard Progress -->
+    <nav class="steps-wizard" aria-label="Progress Reservasi">
+      <div class="step-item active">
+        <div class="step-circle">1</div>
+        <span class="step-label">Cari Jadwal</span>
+      </div>
+      <div class="step-item">
+        <div class="step-circle">2</div>
+        <span class="step-label">Pilih Kursi & Data</span>
+      </div>
+      <div class="step-item">
+        <div class="step-circle">3</div>
+        <span class="step-label">Check-In</span>
+      </div>
+      <div class="step-item">
+        <div class="step-circle">4</div>
+        <span class="step-label">Boarding Pass</span>
+      </div>
+    </nav>
+
+    <!-- Hero Aviation Banner -->
+    <div class="hero-banner">
+      <div class="hero-tag">✈️ Penerbangan Domestik & Internasional</div>
+      <h1 class="hero-title">Terbang Nyaman Bersama SkyPass Airlines</h1>
+      <p class="hero-desc">
+        Nikmati pengalaman terbang premium ke berbagai destinasi favorit di Indonesia dengan armada modern Boeing 737-800, pemilihan kursi kabin interaktif, dan check-in mandiri instan.
       </p>
+    </div>
+
+    <!-- Search Card -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">🔍 Cari Jadwal & Rute Penerbangan</h2>
+          <p class="card-subtitle">Pilih kota asal dan tujuan untuk mengecek kuota kursi dan harga tiket.</p>
+        </div>
+      </div>
 
       <form id="searchForm" onsubmit="handleSearch(event)">
         <div class="form-grid">
@@ -33,33 +83,61 @@
               <option value="CGK">Jakarta (CGK) - Soekarno Hatta</option>
               <option value="SUB">Surabaya (SUB) - Juanda</option>
               <option value="DPS">Bali (DPS) - Ngurah Rai</option>
+              <option value="JOG">Yogyakarta (JOG) - YIA Kulon Progo</option>
+              <option value="KNO">Medan (KNO) - Kualanamu</option>
+              <option value="UPG">Makassar (UPG) - Sultan Hasanuddin</option>
             </select>
           </div>
+
+          <div style="display: flex; align-items: flex-end; justify-content: center; margin-bottom: 4px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="swapOriginDest()" title="Tukar Kota Asal & Tujuan" style="padding: 0.75rem 0.9rem;">
+              ⇄
+            </button>
+          </div>
+
           <div class="form-group">
             <label for="destSelect">Kota Tujuan (Destination)</label>
             <select id="destSelect" required>
               <option value="DPS" selected>Bali (DPS) - Ngurah Rai</option>
-              <option value="SUB">Surabaya (SUB) - Juanda</option>
               <option value="CGK">Jakarta (CGK) - Soekarno Hatta</option>
+              <option value="SUB">Surabaya (SUB) - Juanda</option>
+              <option value="JOG">Yogyakarta (JOG) - YIA Kulon Progo</option>
+              <option value="KNO">Medan (KNO) - Kualanamu</option>
+              <option value="UPG">Makassar (UPG) - Sultan Hasanuddin</option>
             </select>
           </div>
-          <div class="form-group" style="justify-content: flex-end;">
-            <button type="submit" class="btn">Cari Penerbangan</button>
+
+          <div class="form-group">
+            <button type="submit" class="btn" style="width: 100%;">
+              <span>🔍</span> Cari Penerbangan
+            </button>
           </div>
         </div>
       </form>
     </div>
 
+    <!-- Flight Results Section -->
     <div id="resultsSection">
-      <h3>Hasil Penerbangan Tersedia</h3>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap;">
+        <h3 style="color: var(--primary); font-size: 1.15rem; font-weight: 700;">
+          ✈️ Jadwal Penerbangan Langsung Tersedia
+        </h3>
+        <span style="font-size: 0.82rem; color: var(--text-muted);">
+          Harga sudah termasuk pajak & asuransi wajib
+        </span>
+      </div>
+
       <div id="flightList">
-        <p style="color: var(--text-muted);">Tekan tombol "Cari Penerbangan" untuk menampilkan jadwal.</p>
+        <p style="color: var(--text-muted); padding: 1rem 0;">Sedang memuat data jadwal...</p>
       </div>
     </div>
   </main>
 
+  <!-- Professional Airline Footer -->
   <footer>
-    <p>SkyPass Airlines Testing Platform &bull; Didesain khusus untuk <strong>System Testing dengan Apache JMeter</strong></p>
+    <p>
+      <strong>SkyPass Airlines Indonesia</strong> &bull; Layanan Penerbangan Domestik & Internasional Terpercaya &bull; Hak Cipta &copy; 2026 PT SkyPass Airways Indonesia. Seluruh hak cipta dilindungi.
+    </p>
   </footer>
 
   <script src="/app.js"></script>

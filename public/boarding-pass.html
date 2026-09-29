@@ -7,89 +7,146 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+  <!-- Header & Navigation -->
   <header>
     <div class="navbar">
-      <a href="/" class="logo">✈️ SkyPass Airlines</a>
-      <div class="nav-links">
-        <a href="/">Cari Tiket</a>
-        <a href="/checkin.html">Web Check-In</a>
-        <button class="btn-reset" onclick="resetDatabase()">🔄 Reset DB Uji</button>
+      <a href="/" class="logo">
+        <span class="logo-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+          </svg>
+        </span>
+        <div class="logo-text">
+          <span class="logo-brand">SkyPass Airlines</span>
+          <span class="logo-tag">Official Flight Booking</span>
+        </div>
+      </a>
+
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="/">
+            <span>🔍</span> Cari Tiket
+          </a>
+          <a href="/checkin.html">
+            <span>🎫</span> Check-In
+          </a>
+        </div>
       </div>
     </div>
   </header>
 
+  <!-- Main Content -->
   <main>
-    <div id="statusContainer" style="max-width: 650px; margin: 0 auto;"></div>
+    <div id="statusContainer" style="max-width: 720px; margin: 0 auto 1.5rem auto;"></div>
 
+    <!-- Realistic Physical Airport Boarding Pass -->
     <div id="ticketContainer" class="boarding-pass-ticket" style="display: none;">
+      <!-- Pass Header -->
       <div class="bp-header">
         <div>
-          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">SkyPass Airlines Boarding Pass</span>
-          <div style="font-size: 1.4rem; font-weight: 800;" id="bpFlight">AW-101</div>
+          <span class="bp-brand-title">SkyPass Airlines &bull; Boarding Pass Resmi</span>
+          <div class="bp-flight-code" id="bpFlight">AW-101</div>
         </div>
-        <div style="text-align: right;">
-          <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;" id="bpStatus">VALID</span>
+        <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
+          <span class="bp-status-badge" id="bpStatus">VALID</span>
+          <span style="font-size: 0.72rem; color: #94a3b8; letter-spacing: 0.5px;">KELAS EKONOMI</span>
         </div>
       </div>
 
+      <!-- Pass Body -->
       <div class="bp-body">
+        <!-- Main Flight & Passenger Details -->
         <div>
           <div class="bp-field">
-            <div class="label">Nama Penumpang</div>
-            <div class="val" id="bpPassengerName">--</div>
+            <div class="label">Nama Lengkap Penumpang / Passenger Name</div>
+            <div class="val" id="bpPassengerName" style="font-size: 1.35rem; color: var(--primary);">--</div>
           </div>
 
-          <div style="display: flex; gap: 2rem;">
+          <div style="display: flex; gap: 2.5rem; margin-top: 1rem;">
             <div class="bp-field">
-              <div class="label">Rute Asal</div>
-              <div class="val" id="bpOrigin">--</div>
+              <div class="label">Dari (Origin)</div>
+              <div class="val" id="bpOrigin" style="font-size: 1.25rem;">--</div>
             </div>
             <div class="bp-field">
-              <div class="label">Rute Tujuan</div>
-              <div class="val" id="bpDestination">--</div>
+              <div class="label">Ke (Destination)</div>
+              <div class="val" id="bpDestination" style="font-size: 1.25rem;">--</div>
             </div>
           </div>
 
-          <div class="bp-field">
-            <div class="label">Kode Booking (PNR)</div>
-            <div class="val" id="bpPnr" style="color: var(--accent); letter-spacing: 2px;">--</div>
+          <div style="display: flex; gap: 2.5rem; margin-top: 0.5rem;">
+            <div class="bp-field">
+              <div class="label">Kode Booking (PNR)</div>
+              <div class="val-pnr" id="bpPnr">--</div>
+            </div>
+            <div class="bp-field">
+              <div class="label">Pesawat</div>
+              <div class="val" style="font-size: 1rem; color: var(--text-muted);">Boeing 737-800</div>
+            </div>
           </div>
         </div>
 
-        <div style="border-left: 1px solid var(--border); padding-left: 1.5rem; text-align: center;">
-          <div class="bp-field">
-            <div class="label">Nomor Kursi</div>
-            <div class="val" id="bpSeat" style="font-size: 2.2rem; color: #047857;">--</div>
+        <!-- Stub Section: Gate, Seat, Time -->
+        <div class="bp-stub-col">
+          <div class="bp-field" style="text-align: center;">
+            <div class="label">Nomor Kursi (Seat)</div>
+            <div class="val-large" id="bpSeat">--</div>
           </div>
 
-          <div class="bp-field">
-            <div class="label">Pintu (Gate)</div>
-            <div class="val" id="bpGate" style="font-size: 1.4rem; color: var(--primary);">--</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: center; margin-top: 0.5rem;">
+            <div class="bp-field" style="background: var(--surface-alt); padding: 0.6rem; border-radius: var(--radius-sm);">
+              <div class="label">Pintu (Gate)</div>
+              <div class="val" id="bpGate" style="font-size: 1.35rem; color: var(--primary);">--</div>
+            </div>
+            <div class="bp-field" style="background: #fef2f2; padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid #fecaca;">
+              <div class="label" style="color: #991b1b;">Boarding</div>
+              <div class="val" id="bpBoardingTime" style="font-size: 1.25rem; color: #dc2626;">--</div>
+            </div>
           </div>
 
-          <div class="bp-field">
-            <div class="label">Jam Boarding</div>
-            <div class="val" id="bpBoardingTime" style="color: #b91c1c;">--</div>
+          <div style="text-align: center; margin-top: 0.5rem; font-size: 0.72rem; color: var(--text-muted);">
+            Pintu ditutup 15 menit sebelum keberangkatan
           </div>
         </div>
       </div>
 
-      <div class="bp-barcode">
+      <!-- Perforation divider -->
+      <div class="bp-perforation">
+        <div class="bp-cutout-left"></div>
+        <div class="bp-perforation-line"></div>
+        <div class="bp-cutout-right"></div>
+      </div>
+
+      <!-- Barcode / Security Footer -->
+      <div class="bp-barcode-box">
         <div class="barcode-strip"></div>
-        <div style="font-family: monospace; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;" id="bpBarcodeHash">
+        <div class="barcode-hash-text" id="bpBarcodeHash">
           SKYPASS-HASH
+        </div>
+        <div style="font-size: 0.72rem; color: var(--text-subtle); margin-top: 0.35rem;">
+          Tunjukkan boarding pass ini bersama kartu identitas resmi di pintu keberangkatan bandara.
         </div>
       </div>
     </div>
 
-    <div id="actionsContainer" style="max-width: 650px; margin: 1.5rem auto; display: none; text-align: center; gap: 1rem; justify-content: center;">
-      <button onclick="window.print()" class="btn">🖨️ Cetak Boarding Pass</button>
-      <button onclick="cancelCurrentBooking()" class="btn btn-danger">❌ Batalkan Reservasi (Cancel Booking)</button>
+    <!-- Actions Container -->
+    <div id="actionsContainer" style="max-width: 720px; margin: 1.75rem auto; display: none; text-align: center; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <button onclick="window.print()" class="btn btn-primary">
+        <span>🖨️</span> Cetak / Simpan Boarding Pass (PDF)
+      </button>
+      <button onclick="copyPnrFromBp()" class="btn btn-outline">
+        <span>📋</span> Salin Kode PNR
+      </button>
+      <button onclick="cancelCurrentBooking()" class="btn btn-danger">
+        <span>❌</span> Batalkan Reservasi (Cancel Booking)
+      </button>
     </div>
   </main>
 
+  <!-- Professional Airline Footer -->
   <footer>
-    <p>SkyPass Airlines Testing Platform &bull; Didesain khusus untuk <strong>System Testing dengan Apache JMeter</strong></p>
+    <p>
+      <strong>SkyPass Airlines Indonesia</strong> &bull; Layanan Penerbangan Domestik & Internasional Terpercaya &bull; Hak Cipta &copy; 2026 PT SkyPass Airways Indonesia. Seluruh hak cipta dilindungi.
+    </p>
   </footer>
 
   <script src="/app.js"></script>
@@ -100,7 +157,16 @@
     async function loadBoardingPass() {
       if (!pnr) {
         document.getElementById('statusContainer').innerHTML = `
-          <div class="alert alert-danger">Parameter PNR tidak ditemukan. Silakan lakukan check-in terlebih dahulu di <a href="/checkin.html">Halaman Web Check-in</a>.</div>`;
+          <div class="card" style="text-align: center; padding: 2.5rem 1.5rem;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎫</div>
+            <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Kode PNR Tidak Ditemukan</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+              Silakan lakukan check-in terlebih dahulu menggunakan kode pemesanan PNR Anda.
+            </p>
+            <a href="/checkin.html" class="btn">
+              Menuju Halaman Check-In &rarr;
+            </a>
+          </div>`;
         return;
       }
 
@@ -110,14 +176,27 @@
 
         if (!res.ok) {
           document.getElementById('statusContainer').innerHTML = `
-            <div class="alert alert-danger">⚠️ ${data.error}</div>
-            <div style="text-align: center; margin-top: 1rem;"><a href="/checkin.html" class="btn">Menuju Web Check-In</a></div>
-          `;
+            <div class="card" style="text-align: center; padding: 2.5rem 1.5rem; border-color: #fca5a5;">
+              <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">⚠️</div>
+              <h3 style="color: #991b1b; margin-bottom: 0.5rem;">Boarding Pass Belum Tersedia</h3>
+              <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                ${data.error || 'Pemesanan belum melalui tahapan check-in online.'}
+              </p>
+              <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="/checkin.html?pnr=${pnr}" class="btn">Lakukan Check-In Sekarang</a>
+                <a href="/" class="btn btn-outline">Kembali ke Beranda</a>
+              </div>
+            </div>`;
           return;
         }
 
         document.getElementById('bpFlight').innerText = data.flightNumber;
-        document.getElementById('bpStatus').innerText = data.status;
+        const statusEl = document.getElementById('bpStatus');
+        statusEl.innerText = data.status;
+        if (data.status === 'VOID' || data.status === 'CANCELLED') {
+          statusEl.classList.add('void');
+        }
+
         document.getElementById('bpPassengerName').innerText = data.passengerName;
         document.getElementById('bpOrigin').innerText = data.origin;
         document.getElementById('bpDestination').innerText = data.destination;
@@ -132,29 +211,45 @@
 
       } catch (err) {
         document.getElementById('statusContainer').innerHTML = `
-          <div class="alert alert-danger">Koneksi gagal: ${err.message}</div>`;
+          <div class="alert alert-danger">
+            ⚠️ <strong>Koneksi Gagal:</strong> ${err.message}
+          </div>`;
+      }
+    }
+
+    function copyPnrFromBp() {
+      const pnrVal = document.getElementById('bpPnr').innerText.trim();
+      if (pnrVal && pnrVal !== '--') {
+        copyToClipboard(pnrVal, `Kode PNR ${pnrVal} berhasil disalin!`);
       }
     }
 
     async function cancelCurrentBooking() {
-      if (!confirm(`Apakah Anda yakin ingin membatalkan pemesanan dengan PNR ${pnr}? Kursi akan dilepaskan kembali ke sistem.`)) {
-        return;
-      }
+      showConfirmModal({
+        title: '❌ Batalkan Reservasi',
+        message: `Apakah Anda yakin ingin membatalkan pemesanan dengan Kode PNR ${pnr}? Kursi yang dipesan akan dilepaskan kembali ke ketersediaan sistem dan boarding pass akan dinyatakan VOID.`,
+        confirmText: 'Ya, Batalkan Reservasi',
+        confirmClass: 'btn-danger',
+        onConfirm: async () => {
+          try {
+            const res = await fetch(`/api/bookings/${pnr}/cancel`, { method: 'POST' });
+            const data = await res.json();
 
-      try {
-        const res = await fetch(`/api/bookings/${pnr}/cancel`, { method: 'POST' });
-        const data = await res.json();
+            if (!res.ok) {
+              showToast('error', 'Gagal Membatalkan', data.error);
+              return;
+            }
 
-        if (!res.ok) {
-          alert('Gagal membatalkan: ' + data.error);
-          return;
+            showToast('success', 'Reservasi Dibatalkan', data.message || 'Pemesanan berhasil dibatalkan.');
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 1200);
+
+          } catch (err) {
+            showToast('error', 'Koneksi Gagal', err.message);
+          }
         }
-
-        alert('✅ ' + data.message);
-        window.location.href = '/';
-      } catch (err) {
-        alert('Koneksi gagal: ' + err.message);
-      }
+      });
     }
 
     loadBoardingPass();

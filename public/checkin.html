@@ -3,50 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Check-In - SkyPass Airlines</title>
+  <title>Check-In Mandiri - SkyPass Airlines</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+  <!-- Header & Navigation -->
   <header>
     <div class="navbar">
-      <a href="/" class="logo">✈️ SkyPass Airlines</a>
-      <div class="nav-links">
-        <a href="/">Cari Tiket</a>
-        <a href="/checkin.html" class="active">Web Check-In</a>
-        <button class="btn-reset" onclick="resetDatabase()">🔄 Reset DB Uji</button>
+      <a href="/" class="logo">
+        <span class="logo-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+          </svg>
+        </span>
+        <div class="logo-text">
+          <span class="logo-brand">SkyPass Airlines</span>
+          <span class="logo-tag">Official Flight Booking</span>
+        </div>
+      </a>
+
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="/">
+            <span>🔍</span> Cari Tiket
+          </a>
+          <a href="/checkin.html" class="active">
+            <span>🎫</span> Check-In
+          </a>
+        </div>
       </div>
     </div>
   </header>
 
+  <!-- Main Content -->
   <main>
-    <div class="card" style="max-width: 600px; margin: 2rem auto;">
-      <h2>🎫 Web Check-In Online</h2>
-      <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
-        Masukkan 6-karakter Kode Booking (PNR) dan email penumpang terdaftar untuk menerbitkan Digital Boarding Pass.
-      </p>
+    <!-- Check-In Card -->
+    <div class="card" style="max-width: 640px; margin: 1.5rem auto; box-shadow: var(--shadow-lg);">
+      <div class="card-header" style="text-align: center; display: block; border-bottom: none; margin-bottom: 0.5rem;">
+        <div style="font-size: 2.75rem; margin-bottom: 0.5rem;">🎫</div>
+        <h2 class="card-title" style="justify-content: center; font-size: 1.45rem;">
+          Check-In Mandiri Online
+        </h2>
+        <p class="card-subtitle" style="max-width: 480px; margin: 0.4rem auto 0 auto;">
+          Masukkan 6-karakter Kode Booking (PNR) dan email penumpang terdaftar untuk memvalidasi dan menerbitkan Digital Boarding Pass resmi.
+        </p>
+      </div>
 
       <div id="checkinAlert"></div>
 
       <form id="checkinForm" onsubmit="handleCheckin(event)">
-        <div class="form-group" style="margin-bottom: 1.2rem;">
-          <label for="pnrInput">Kode Booking (PNR)</label>
-          <input type="text" id="pnrInput" placeholder="Contoh: SK7X2A" style="font-size: 1.2rem; text-transform: uppercase; font-weight: 700; letter-spacing: 2px;" required maxlength="6">
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="pnrInput">Kode Booking Resmi (6 Karakter PNR)</label>
+          <input 
+            type="text" 
+            id="pnrInput" 
+            placeholder="SK7X2A" 
+            style="font-family: var(--font-mono); font-size: 1.35rem; text-transform: uppercase; font-weight: 800; letter-spacing: 4px; text-align: center; color: var(--accent);" 
+            required 
+            maxlength="6"
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <span style="font-size: 0.76rem; color: var(--text-muted); text-align: center;">
+            Contoh format: Diawali dengan kode SK (misal: <code>SKRN8V</code>)
+          </span>
         </div>
 
-        <div class="form-group" style="margin-bottom: 1.5rem;">
-          <label for="emailInput">Email Terdaftar Penumpang</label>
-          <input type="email" id="emailInput" placeholder="Contoh: budi.santoso@example.com" required>
+        <div class="form-group" style="margin-bottom: 1.75rem;">
+          <label for="emailInput">Alamat Email Terdaftar Penumpang</label>
+          <input 
+            type="email" 
+            id="emailInput" 
+            placeholder="nama.penumpang@domain.com" 
+            required 
+            autocomplete="email"
+          >
+          <span style="font-size: 0.76rem; color: var(--text-muted);">
+            Email harus sama persis dengan yang diinput saat reservasi kursi.
+          </span>
         </div>
 
-        <button type="submit" class="btn" style="width: 100%; font-size: 1.05rem;" id="btnSubmitCheckin">
-          Verifikasi & Terbitkan Boarding Pass
+        <button type="submit" class="btn" style="width: 100%; font-size: 1.05rem; padding: 0.85rem;" id="btnSubmitCheckin">
+          <span>✈️</span> Verifikasi & Terbitkan Boarding Pass
         </button>
       </form>
+
+      <!-- Security / Tips Box -->
+      <div style="margin-top: 1.75rem; padding: 1rem 1.25rem; background: var(--surface-alt); border-radius: var(--radius-md); border: 1px solid var(--border); font-size: 0.82rem; color: var(--text-muted); display: flex; gap: 0.75rem; align-items: flex-start;">
+        <span style="font-size: 1.2rem;">🔒</span>
+        <div>
+          <strong style="color: var(--text-main);">Keamanan Data & Validasi Check-In:</strong><br>
+          Sistem SkyPass secara ketat memverifikasi kesesuaian email dan kode PNR. Check-in berulang (duplikat) atau email yang tidak cocok akan ditolak demi keamanan penerbangan.
+        </div>
+      </div>
     </div>
   </main>
 
+  <!-- Professional Airline Footer -->
   <footer>
-    <p>SkyPass Airlines Testing Platform &bull; Didesain khusus untuk <strong>System Testing dengan Apache JMeter</strong></p>
+    <p>
+      <strong>SkyPass Airlines Indonesia</strong> &bull; Layanan Penerbangan Domestik & Internasional Terpercaya &bull; Hak Cipta &copy; 2026 PT SkyPass Airways Indonesia. Seluruh hak cipta dilindungi.
+    </p>
   </footer>
 
   <script src="/app.js"></script>
@@ -55,7 +112,7 @@
     const prefillPnr = urlParams.get('pnr');
     const prefillEmail = urlParams.get('email');
 
-    if (prefillPnr) document.getElementById('pnrInput').value = prefillPnr;
+    if (prefillPnr) document.getElementById('pnrInput').value = prefillPnr.toUpperCase();
     if (prefillEmail) document.getElementById('emailInput').value = prefillEmail;
 
     async function handleCheckin(e) {
@@ -63,8 +120,12 @@
       const pnr = document.getElementById('pnrInput').value.trim().toUpperCase();
       const passengerEmail = document.getElementById('emailInput').value.trim();
       const alertBox = document.getElementById('checkinAlert');
+      const submitBtn = document.getElementById('btnSubmitCheckin');
 
-      alertBox.innerHTML = '<p>Memproses verifikasi check-in...</p>';
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>⏳</span> Memverifikasi Data Check-In...';
+      alertBox.innerHTML = '';
 
       try {
         const res = await fetch('/api/check-in', {
@@ -74,19 +135,36 @@
         });
 
         const data = await res.json();
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
 
         if (!res.ok) {
-          alertBox.innerHTML = `<div class="alert alert-danger">⚠️ ${data.error}</div>`;
+          alertBox.innerHTML = `
+            <div class="alert alert-danger">
+              ⚠️ <strong>Validasi Gagal:</strong> ${data.error}
+            </div>`;
+          showToast('error', 'Check-In Gagal', data.error);
           return;
         }
 
-        alertBox.innerHTML = `<div class="alert alert-success">✅ Check-in Berhasil! Mengalihkan ke Boarding Pass...</div>`;
+        alertBox.innerHTML = `
+          <div class="alert alert-success">
+            ✅ <strong>Check-In Berhasil!</strong> Menerbitkan Digital Boarding Pass...
+          </div>`;
+        showToast('success', 'Check-In Berhasil', `Nomor Kursi & Gate telah diterbitkan.`);
+
         setTimeout(() => {
           window.location.href = `/boarding-pass.html?pnr=${pnr}`;
-        }, 1000);
+        }, 800);
 
       } catch (err) {
-        alertBox.innerHTML = `<div class="alert alert-danger">Koneksi gagal: ${err.message}</div>`;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        alertBox.innerHTML = `
+          <div class="alert alert-danger">
+            ⚠️ <strong>Koneksi Gagal:</strong> ${err.message}
+          </div>`;
+        showToast('error', 'Koneksi Gagal', err.message);
       }
     }
   </script>
