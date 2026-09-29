@@ -1,31 +1,64 @@
 # SkyPass Airlines - Flight Reservation & Boarding Pass System
 
-Aplikasi target pengujian sistem (*System Testing Target Application*) untuk **Apache JMeter**, menyimulasikan sistem reservasi penerbangan, pemilihan denah kursi kabin pesawat (*Seat Map*), web check-in, dan penerbitan *Digital Boarding Pass*.
+Aplikasi reservasi penerbangan dan penerbitan *Digital Boarding Pass* modern berstandar komersial yang sekaligus dirancang sebagai aplikasi target pengujian sistem (*System Testing Target Application*) untuk **Apache JMeter** (15 Test Cases standar ISTQB).
 
-## 🚀 Quick Start (Menjalankan Langsung)
+---
 
-1. Jalankan aplikasi:
-   ```bash
-   npm start
-   ```
-2. Buka browser pada alamat:
-   - **Web Portal**: [http://localhost:3000](http://localhost:3000)
-   - **Web Check-In**: [http://localhost:3000/checkin.html](http://localhost:3000/checkin.html)
-   - **Health Check API**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
+## 🌟 Fitur Utama Aplikasi
 
-3. Uji coba cepat 15 Test Cases:
-   ```bash
-   npm test
-   ```
+1. **Pencarian Jadwal Penerbangan Luas & Bervariasi**:
+   - Menghubungkan 6 kota besar di Indonesia: **Jakarta (CGK)**, **Surabaya (SUB)**, **Bali (DPS)**, **Yogyakarta (JOG)**, **Medan (KNO)**, dan **Makassar (UPG)**.
+   - Menyediakan **30 jadwal penerbangan harian** dengan pilihan waktu keberangkatan fleksibel (Pagi, Siang, Sore, Malam).
+   - Fitur *swap route* (`⇄`) instan dan indikator ketersediaan sisa kursi (*real-time inventory*).
+
+2. **Denah Kabin Pesawat Interaktif (*Interactive Seat Map*)**:
+   - Visualisasi badan pesawat realistis (*Fuselage*) dengan siluet kokpit pilot, jendela kabin, dan sayap.
+   - Konfigurasi kabin 30 kursi kelas ekonomi (Baris 1–5, Kursi A–F dengan lorong tengah / *aisle*).
+   - Interaksi kursi responsif dengan efek visual *headrest* dan status dinamis (*Tersedia, Dipilih, Terpesan, Checked-In*).
+
+3. **Check-In Mandiri Online**:
+   - Validasi instan kode booking resmi (**PNR 6-karakter**) dan email penumpang.
+   - Mekanisme keamanan aviasi ketat: proteksi *duplicate check-in* dan verifikasi kecocokan identitas penumpang.
+
+4. **Digital Boarding Pass Resmi**:
+   - Tata letak tiket fisik bandara dengan garis perforasi sobekan (*tear-off stub*), nomor kursi besar, pintu keberangkatan (*Gate*), jam boarding, dan simulasi barcode resolusi tajam.
+   - Dukungan cetak rapi (*Print-ready layout*) dengan `Ctrl + P` atau tombol simpan PDF tanpa navbar/footer.
+   - Fitur pembatalan reservasi (*Cancel Booking*) dengan pelepasan status kursi secara otomatis kembali ke sistem.
+
+5. **Desain Antarmuka Premium & Profesional**:
+   - Tipografi modern **Plus Jakarta Sans** dan **JetBrains Mono**.
+   - Sistem notifikasi *Toast* dan dialog konfirmasi modal terintegrasi, bebas dari elemen pengujian teknis pada antarmuka publik.
+
+---
+
+## 🚀 Panduan Menjalankan Aplikasi
+
+### 1. Prasyarat:
+- **Node.js**: Versi 18.x, 20.x, atau 22.x (Sudah terpasang di sistem).
+- Tidak membutuhkan instalasi DBMS eksternal (menggunakan JSON Store transaksional lokal).
+
+### 2. Menjalankan Server:
+```bash
+npm start
+```
+Server akan aktif di:
+- **Portal Reservasi**: [http://localhost:3000](http://localhost:3000)
+- **Check-In Mandiri**: [http://localhost:3000/checkin.html](http://localhost:3000/checkin.html)
+- **Health Check API**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
+
+### 3. Menjalankan Pengujian Otomatis (15 Test Cases):
+```bash
+npm test
+```
 
 ---
 
 ## 🧪 System Testing dengan Apache JMeter
 
-File test plan JMeter lengkap dengan **15 Test Cases (TC01 s/d TC15)** tersedia pada file:
-`skypass-system-testing.jmx`
+File test plan JMeter lengkap dengan skenario **TC01 s/d TC15** tersedia pada:
+📁 **`skypass-system-testing.jmx`**
 
-Untuk panduan lengkap cara membuka, menjalankan, dan membaca laporan pengujian di Apache JMeter, silakan baca:
+Panduan lengkap cara membuka, menjalankan, dan menghasilkan laporan HTML interaktif di Apache JMeter tersedia di:
 📘 [**SYSTEM_TESTING_GUIDE.md**](./SYSTEM_TESTING_GUIDE.md)
 
 ---
@@ -35,44 +68,52 @@ Untuk panduan lengkap cara membuka, menjalankan, dan membaca laporan pengujian d
 ```text
 Jmeter/
 ├── package.json                   # Konfigurasi dependensi Node.js
-├── server.js                      # Entry point server (Port 3000)
+├── server.js                      # Entry point Express server (Port 3000)
 ├── skypass-system-testing.jmx     # File Apache JMeter Test Plan (15 TCs)
 ├── SYSTEM_TESTING_GUIDE.md        # Panduan lengkap pengujian JMeter
 ├── README.md                      # Dokumentasi utama proyek
 ├── data/
-│   ├── database.json              # Penyimpanan persisten lokal (JSON Store)
+│   ├── database.json              # Database lokal persisten (30 jadwal penerbangan)
 │   └── seed.json                  # Cadangan data awal untuk reset otomatis
 ├── src/
-│   ├── app.js                     # Handler Express & routing REST API
+│   ├── app.js                     # Express API router & business rules
 │   └── db.js                      # Transaction manager & state transitions
-├── public/                        # Antarmuka web frontend
-│   ├── index.html                 # Pencarian jadwal & rute penerbangan
-│   ├── seats.html                 # Peta interaktif kabin 30 kursi (1A - 5F)
-│   ├── checkin.html               # Portal web check-in online
-│   ├── boarding-pass.html         # Tampilan digital boarding pass & barcode
-│   ├── styles.css                 # Desain modern tema maskapai penerbangan
-│   └── app.js                     # Client-side JavaScript
-└── test/
-    ├── api.test.js                # Automated runner 15 System Test Cases
-    └── db.test.js                 # Unit test transactional database
+├── public/                        # Antarmuka web frontend (Clean & Professional)
+│   ├── index.html                 # Pencarian jadwal penerbangan & wizard tahapan
+│   ├── seats.html                 # Denah kabin kabin pesawat realistis (1A - 5F)
+│   ├── checkin.html               # Portal check-in mandiri online
+│   ├── boarding-pass.html         # Digital boarding pass dengan barcode & cetak PDF
+│   ├── styles.css                 # Desain sistem aviasi & responsive stylesheet
+│   └── app.js                     # Logika klien, toast, modal dialog, & kamus bandara
+├── test/
+│   ├── api.test.js                # Test runner otomatis 15 System Test Cases
+│   └── db.test.js                 # Unit test transactional database
+└── docs/                          # Spesifikasi arsitektur & rencana teknis
 ```
 
 ---
 
 ## 📋 Ringkasan 15 Test Case (Standar ISTQB)
 
-1. **TC01**: E2E Flight Search (`GET /api/flights`) &rarr; 200 OK & simpan `flightNumber`.
-2. **TC02**: Non-Existent Route (`GET /api/flights?origin=CGK&destination=XYZ`) &rarr; 200 OK array kosong `[]`.
-3. **TC03**: Missing Parameter Boundary (`GET /api/flights?origin=CGK`) &rarr; 400 Bad Request.
-4. **TC04**: Retrieve Cabin Seat Map (`GET /api/flights/${flightNumber}/seats`) &rarr; 200 OK & ambil kursi tersedia.
-5. **TC05**: Non-Existent Flight (`GET /api/flights/AW-999/seats`) &rarr; 404 Not Found.
-6. **TC06**: E2E Booking Creation (`POST /api/bookings`) &rarr; 201 Created & generate PNR unik 6 digit.
-7. **TC07**: Double Booking Seat Collision (`POST /api/bookings`) &rarr; 409 Conflict.
-8. **TC08**: Malformed Email Schema (`POST /api/bookings`) &rarr; 400 Bad Request.
-9. **TC09**: Out-of-Bounds Seat Number (`POST /api/bookings`) &rarr; 400 Bad Request.
-10. **TC10**: Retrieve Booking by PNR (`GET /api/bookings/${pnr}`) &rarr; 200 OK & integritas data.
-11. **TC11**: Non-Existent PNR Query (`GET /api/bookings/FAKEXX`) &rarr; 404 Not Found.
-12. **TC12**: E2E Web Check-In (`POST /api/check-in`) &rarr; 200 OK & penerbitan Boarding Pass.
-13. **TC13**: Duplicate Check-In State Violation (`POST /api/check-in`) &rarr; 400 Bad Request.
-14. **TC14**: Security / Email Mismatch (`POST /api/check-in`) &rarr; 403 Forbidden.
-15. **TC15**: Cancellation & Seat Release (`POST /api/bookings/${pnr}/cancel`) &rarr; 200 OK & pemulihan kursi.
+| Kode TC | Skenario Pengujian | Tipe System Testing | Hasil yang Diharapkan |
+| :---: | :--- | :--- | :--- |
+| **TC01** | E2E Flight Search (`CGK` &rarr; `DPS`) | Positive Discovery | 200 OK & menangkap `AW-101` |
+| **TC02** | Non-Existent Route (`CGK` &rarr; `XYZ`) | Negative Functional | 200 OK dengan array kosong `[]` |
+| **TC03** | Missing Destination Parameter | Interface Boundary | 400 Bad Request & error validasi |
+| **TC04** | Retrieve Cabin Seat Map | Inventory State | 200 OK & 30 kursi kabin tersedia |
+| **TC05** | Query Fictitious Flight (`AW-999`) | Resource Boundary | 404 Not Found |
+| **TC06** | E2E Passenger Booking Creation | E2E Transactional | 201 Created & generate PNR unik |
+| **TC07** | Double Booking Seat Collision | Concurrency Conflict | 409 Conflict (kursi sudah terpesan) |
+| **TC08** | Malformed Email Validation | Input Schema | 400 Bad Request |
+| **TC09** | Out-of-Bounds Seat Number (`99Z`) | Physical Boundary | 400 Bad Request |
+| **TC10** | Retrieve Booking by PNR | Data Persistence | 200 OK & verifikasi kecocokan data |
+| **TC11** | Non-Existent PNR Query (`FAKEXX`) | Boundary Value | 404 Not Found |
+| **TC12** | E2E Check-In & Boarding Pass Issuance | State Machine Transition | 200 OK & penerbitan nomor Gate |
+| **TC13** | Duplicate Check-In Violation | State Integrity | 400 Bad Request |
+| **TC14** | Security / Email Mismatch Check-In | Security Authorization | 403 Forbidden |
+| **TC15** | Booking Cancellation & Seat Release | State Rollback & Recovery | 200 OK & kursi kembali *Available* |
+
+---
+
+## 📄 Lisensi & Hak Cipta
+Hak Cipta &copy; 2026 **SkyPass Airlines Indonesia**. Seluruh hak cipta dilindungi undang-undang.

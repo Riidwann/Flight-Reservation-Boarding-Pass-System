@@ -1,6 +1,6 @@
 # Panduan Lengkap System Testing dengan Apache JMeter: SkyPass Airlines
 
-Dokumen ini adalah panduan praktis untuk menjalankan aplikasi **SkyPass Airlines** dan mengeksekusi **15 Test Cases System Testing** menggunakan **Apache JMeter**.
+Dokumen ini adalah panduan praktis untuk menjalankan aplikasi **SkyPass Airlines** dan mengeksekusi **15 Test Cases System Testing** menggunakan **Apache JMeter** (berstandar ISTQB).
 
 ---
 
@@ -20,31 +20,45 @@ Aplikasi ini berbasis **Node.js & Express** dengan database lokal persisten yang
    ```
 3. Server akan aktif pada:
    - 🌐 **Web Portal**: [http://localhost:3000](http://localhost:3000)
-   - 🩺 **Health Check**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
+   - 🎫 **Check-In Mandiri**: [http://localhost:3000/checkin.html](http://localhost:3000/checkin.html)
+   - 🩺 **Health Check API**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
 
 ---
 
 ## 2. Fitur Antarmuka Web (Manual Testing)
 
-Anda dapat mencoba fitur aplikasi secara visual di browser sebelum menjalankan pengujian otomatis di JMeter:
-1. **Cari Tiket (`/index.html`)**: Pilih rute Jakarta (CGK) ke Bali (DPS), tekan "Cari Penerbangan".
-2. **Pilih Kursi Kabin (`/seats.html`)**: Klik salah satu kursi biru (Available) pada denah kabin 5 baris (1A - 5F). Isi data penumpang dan konfirmasi untuk menerbitkan 6-digit kode PNR (misal: `SK7X2A`).
-3. **Web Check-In (`/checkin.html`)**: Masukkan kode PNR dan email yang didaftarkan.
-4. **Digital Boarding Pass (`/boarding-pass.html`)**: Menampilkan boarding pass resmi dengan nomor Gate, jam boarding, dan barcode digital.
-5. **Tombol Reset DB**: Tersedia tombol `🔄 Reset DB Uji` di sudut kanan atas untuk mengembalikan database ke kondisi awal kapan saja.
+Anda dapat mencoba seluruh alur pengguna secara visual di browser sebelum menjalankan pengujian otomatis di JMeter:
+1. **Cari Tiket (`/index.html`)**: 
+   - Pilih rute penerbangan antar 6 kota besar (Jakarta `CGK`, Surabaya `SUB`, Bali `DPS`, Yogyakarta `JOG`, Medan `KNO`, Makassar `UPG`).
+   - Tersedia tombol *Swap Rute* (`⇄`) dan pilihan 30 jadwal penerbangan (Pagi, Siang, Sore, Malam).
+   - Klik tombol **"Pilih Kursi &rarr;"** pada jadwal yang diinginkan.
+2. **Pilih Kursi Kabin (`/seats.html`)**: 
+   - Visualisasi badan pesawat (*fuselage*) realistis dengan siluet kokpit pilot, jendela kabin, dan lorong tengah (*aisle*).
+   - Klik salah satu kursi bertanda biru (*Available*) pada konfigurasi 5 baris (1A - 5F).
+   - Isi formulir identitas penumpang, lalu klik tombol **"Konfirmasi & Terbitkan PNR"**.
+   - Salin kode booking resmi (**PNR**) yang terbit, atau klik langsung tombol **"Lanjut ke Check-In &rarr;"**.
+3. **Check-In Mandiri (`/checkin.html`)**: 
+   - Masukkan 6-karakter kode PNR dan email penumpang terdaftar.
+   - Sistem memvalidasi kesesuaian data dan mengarahkan pengguna ke halaman Boarding Pass.
+4. **Digital Boarding Pass (`/boarding-pass.html`)**: 
+   - Menampilkan tiket fisik resmi bandara dengan nomor kursi besar, pintu keberangkatan (*Gate*), jam boarding, dan barcode digital.
+   - Tersedia tombol **"Cetak / Simpan Boarding Pass (PDF)"** yang dioptimalkan dengan CSS `@media print` tanpa navbar/footer.
+   - Tersedia fitur pembatalan reservasi (*Cancel Booking*) yang secara otomatis memulihkan kursi ke status *Available*.
+5. **Reset Database**:
+   - Untuk kebutuhan pengujian otomatis atau mengembalikan data ke kondisi awal, endpoint REST API `POST /api/system/reset` telah terpasang dan dieksekusi secara otomatis oleh skrip JMeter pada tahap inisialisasi (*Setup Thread Group*).
 
 ---
 
 ## 3. Menjalankan System Testing di Apache JMeter
 
-File test plan JMeter telah disiapkan di root folder:
-📁 `skypass-system-testing.jmx`
+File test plan JMeter telah disiapkan di root folder proyek:
+📁 **`skypass-system-testing.jmx`**
 
 ### A. Menggunakan JMeter GUI (Rekomendasi untuk Visualisasi Hasil):
 1. Buka aplikasi **Apache JMeter** di komputer Anda.
 2. Klik menu **File** &rarr; **Open** (atau tekan `Ctrl + O`).
 3. Pilih file `skypass-system-testing.jmx` dari folder proyek ini.
-4. Di panel sebelah kiri, Anda akan melihat struktur:
+4. Di panel sebelah kiri, Anda akan melihat struktur test plan:
    - `SkyPass Airlines - 15 System Testing Suite`
      - `HTTP Request Defaults` (Server: `localhost`, Port: `3000`)
      - `HTTP Header Manager` (`Content-Type: application/json`)
@@ -61,26 +75,26 @@ File test plan JMeter telah disiapkan di root folder:
        - `TC09 - [Boundary] Out-of-Bounds Physical Seat (99Z)`
        - `TC10 - [Data Integrity] Retrieve Booking by PNR`
        - `TC11 - [Boundary] Query Non-Existent PNR (FAKEXX)`
-       - `TC12 - [E2E Check-In] Execute Web Check-In`
+       - `TC12 - [E2E Check-In] Execute Check-In`
        - `TC13 - [State Machine] Duplicate Check-In Attempt`
        - `TC14 - [Security Auth] Check-In Email Mismatch`
        - `TC15 - [State Rollback] Cancel Booking & Verify Seat Restored`
        - 📊 `View Results Tree`
        - 📈 `Summary Report`
-5. Pastikan server Node.js sedang menyala (`npm start`).
+5. Pastikan server Node.js sedang aktif (`npm start`).
 6. Klik tombol **Play hijau (Start)** di toolbar atas atau tekan `Ctrl + R`.
 7. Klik pada listener **View Results Tree**:
-   - Seluruh 15 test case akan menampilkan centang hijau (Passed).
-   - Anda dapat mengklik masing-masing request untuk melihat *Request Body*, *Response Data*, dan *Assertion Results*.
+   - Seluruh 15 test case akan menampilkan centang hijau (*Passed*).
+   - Anda dapat mengklik masing-masing request untuk menginspeksi *Request Body*, *Response Data*, dan *Assertion Results*.
 
 ---
 
 ### B. Menjalankan via Command Line (Non-GUI Mode & Dashboard HTML):
-Jika JMeter sudah terdaftar di PATH sistem Anda, Anda dapat mengeksekusi test plan dan langsung menghasilkan laporan HTML interaktif:
+Jika JMeter sudah terdaftar di `PATH` sistem operasi Anda, eksekusi test plan dan langsung hasilkan laporan HTML interaktif dengan perintah:
 ```bash
 jmeter -n -t skypass-system-testing.jmx -l test-results.jtl -e -o html-report/
 ```
-Setelah selesai, buka file `html-report/index.html` di browser Anda untuk melihat grafik statistik performa dan status kelulusan pengujian.
+Setelah proses selesai, buka file `html-report/index.html` di browser Anda untuk melihat grafik statistik performa, *throughput*, dan tingkat kelulusan pengujian 100%.
 
 ---
 
@@ -98,18 +112,18 @@ Setelah selesai, buka file `html-report/index.html` di browser Anda untuk meliha
 | **TC08** | Malformed Email Validation | Input Schema | `POST /api/bookings` | Email: `"not-an-email"` | Code: 400 Bad Request. Assertion memvalidasi pesan `"Invalid email format"`. |
 | **TC09** | Out-of-Bounds Seat Number | Physical Boundary | `POST /api/bookings` | Kursi: `"99Z"` | Code: 400 Bad Request. Assertion memvalidasi pesan `"Invalid seat number"`. |
 | **TC10** | Retrieve Booking by PNR | Data Persistence | `GET /api/bookings/${var_pnr}` | - | Code: 200 OK. JSON Assertion mencocokkan PNR dan status `"CONFIRMED"`. |
-| **TC11** | Non-Existent PNR Query | Negative Query | `GET /api/bookings/FAKEXX` | - | Code: 404 Not Found. Assertion memvalidasi pesan `"Booking not found"`. |
-| **TC12** | Execute Web Check-In | E2E Check-In Workflow | `POST /api/check-in` | JSON Body: `${var_pnr}` + email terdaftar | Code: 200 OK. Ekstrak `${var_bpId}`, verifikasi status tiket berubah jadi `"VALID"`. |
-| **TC13** | Duplicate Check-In Attempt | State Machine Violation | `POST /api/check-in` | JSON Body: PNR yang sudah check-in di TC12 | Code: 400 Bad Request. Assertion memvalidasi pesan `"Already checked in"`. |
-| **TC14** | Email Mismatch Security | Security / Access Control | `POST /api/check-in` | JSON Body: PNR valid + email salah | Code: 403 Forbidden. Assertion memvalidasi pesan `"Email verification failed"`. |
-| **TC15** | Cancel Booking & Rollback | State Recovery & Lifecycle | `POST /api/bookings/${var_pnr}/cancel` | - | Code: 200 OK. Assertion memvalidasi status `"CANCELLED"` dan kursi kembali berstatus `"available"`. |
+| **TC11** | Query Non-Existent PNR | Boundary Value | `GET /api/bookings/FAKEXX` | - | Code: 404 Not Found. Assertion memvalidasi status 404 tanpa kebocoran data internal. |
+| **TC12** | Execute Check-In | State Transition | `POST /api/check-in` | JSON Body: `${var_pnr}` + email terdaftar | Code: 200 OK. Menerbitkan nomor Gate dan boarding pass resmi. |
+| **TC13** | Duplicate Check-In Attempt | State Integrity | `POST /api/check-in` | JSON Body: data yang sama dengan TC12 | Code: 400 Bad Request. Assertion memvalidasi pesan `"Already checked in"`. |
+| **TC14** | Check-In Email Mismatch | Security Authorization | `POST /api/check-in` | JSON Body: PNR valid + email salah | Code: 403 Forbidden. Assertion memvalidasi pesan `"Email verification failed"`. |
+| **TC15** | Cancel Booking & Rollback | State Recovery | `POST /api/bookings/${var_pnr}/cancel` | - | Code: 200 OK. Assertion memvalidasi status `"CANCELLED"` dan pemulihan kursi kembali ke *Available*. |
 
 ---
 
-## 5. Menjalankan Verifikasi Cepat Tanpa GUI (Automated Runner)
+## 5. Menjalankan Automated Runner Mandiri (`npm test`)
 
-Jika Anda ingin memverifikasi kelulusan ke-15 test case secara instan melalui terminal sebelum membuka JMeter, jalankan:
+Selain menggunakan JMeter GUI dan CLI, Anda dapat menjalankan seluruh 15 pengujian sistem secara otomatis langsung melalui Node.js runner:
 ```bash
 npm test
 ```
-Script ini akan mengeksekusi ke-15 skenario di atas secara terprogram dengan parameter dan assertion yang sama persis seperti di JMeter.
+Runner ini mengeksekusi urutan pengujian yang sama persis dengan skenario JMeter dan menampilkan laporan kelulusan langsung di konsol terminal Anda.

@@ -8,20 +8,21 @@
 
 ## 1. System Overview & Architecture
 
-SkyPass Airlines is an integrated flight reservation and web check-in application built to demonstrate full-stack software development and comprehensive **System Testing** using Apache JMeter.
+SkyPass Airlines is an integrated flight reservation and check-in application built to demonstrate full-stack software development and comprehensive **System Testing** using Apache JMeter.
 
 ### Technology Stack
-- **Backend Runtime**: Node.js (v22.x compatible)
+- **Backend Runtime**: Node.js (v18.x / v20.x / v22.x compatible)
 - **Web Framework**: Express.js
 - **Persistence Layer**: Local JSON-backed transactional storage (`data/database.json`) with in-memory synchronization, zero external DBMS dependencies, zero compilation requirements on Windows.
-- **Frontend Layer**: Responsive web interface (`public/index.html`, `public/seats.html`, `public/checkin.html`, `public/boarding-pass.html`) using vanilla HTML5/CSS3/JavaScript.
-- **Testing Tool**: Apache JMeter Test Plan (`skypass-system-testing.jmx`).
+- **Frontend Layer**: Responsive, modern airline web interface (`public/index.html`, `public/seats.html`, `public/checkin.html`, `public/boarding-pass.html`) using vanilla HTML5/CSS3/JavaScript, Google Fonts (Plus Jakarta Sans & JetBrains Mono), realistic aircraft cabin fuselage, print-ready boarding pass, and integrated toast/modal components.
+- **Testing Tool**: Apache JMeter Test Plan (`skypass-system-testing.jmx`) & Automated Node.js Runner (`npm test`).
 
 ---
 
 ## 2. Domain Model & Data Schemas
 
 ### 2.1 Flight Entity (`flights`)
+The inventory supports 30 daily flights connecting 6 major Indonesian cities: Jakarta (`CGK`), Surabaya (`SUB`), Bali (`DPS`), Yogyakarta (`JOG`), Medan (`KNO`), and Makassar (`UPG`).
 ```json
 {
   "flightNumber": "AW-101",
@@ -32,12 +33,12 @@ SkyPass Airlines is an integrated flight reservation and web check-in applicatio
   "arrivalTime": "10:50",
   "price": 1250000,
   "totalSeats": 30,
-  "availableSeats": 29
+  "availableSeats": 30
 }
 ```
 
 ### 2.2 Seat Entity (`seats`)
-Aircraft cabin configuration: 5 rows (1 to 5) with 6 seats each (A, B, C, D, E, F) totaling 30 seats.
+Aircraft cabin configuration: 5 rows (1 to 5) with 6 seats each (A, B, C, D, E, F) totaling 30 seats per flight.
 ```json
 {
   "flightNumber": "AW-101",
@@ -130,7 +131,7 @@ Aircraft cabin configuration: 5 rows (1 to 5) with 6 seats each (A, B, C, D, E, 
 
 | TC ID | Sub-Tipe System Testing | Target Request & Parameter | Validasi & Assertion JMeter |
 | :--- | :--- | :--- | :--- |
-| **TC01** | E2E Functional Discovery | `GET /api/flights?origin=CGK&destination=DPS` | Code: 200, JSON Path `$[0].flightNumber` exists, extract `${var_flightNumber}`. |
+| **TC01** | E2E Functional Discovery | `GET /api/flights?origin=CGK&destination=DPS` | Code: 200, JSON Path `$[0].flightNumber` exists, extract `${var_flightNumber}` (`AW-101`). |
 | **TC02** | Negative / Zero-Result | `GET /api/flights?origin=CGK&destination=XYZ` | Code: 200, JSON Path `$` length == 0. |
 | **TC03** | Interface Boundary | `GET /api/flights?origin=CGK` | Code: 400, Response contains `"destination parameter is required"`. |
 | **TC04** | Inventory State Presentation | `GET /api/flights/${var_flightNumber}/seats` | Code: 200, extract first available seat `${var_seatNumber}`. |
@@ -157,4 +158,4 @@ Aircraft cabin configuration: 5 rows (1 to 5) with 6 seats each (A, B, C, D, E, 
    - Regular Expression / JSON Path Extractors
    - Response Code Assertions & JSON Path Assertions
    - View Results Tree & Summary Report Listeners
-3. Documentation (`SYSTEM_TESTING_GUIDE.md`) with instructions on running the app and executing the test plan in JMeter.
+3. Documentation (`SYSTEM_TESTING_GUIDE.md` & `README.md`) with instructions on running the app and executing the test plan in JMeter.
