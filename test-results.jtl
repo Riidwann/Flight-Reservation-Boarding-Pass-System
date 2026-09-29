@@ -1,0 +1,17 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1790658169696,90,Setup - Reset Database to Seed State,200,OK,SkyPass System Testing Thread Group 1-1,text,true,,449,210,1,1,http://localhost:3000/api/system/reset,81,0,60
+1790658169796,3,TC01 - [Positive] Search Flights (CGK to DPS),200,OK,SkyPass System Testing Thread Group 1-1,text,true,,598,212,1,1,http://localhost:3000/api/flights?origin=CGK&destination=DPS,3,0,0
+1790658169880,4,TC02 - [Negative] Search Non-Existent Route (CGK to XYZ),200,OK,SkyPass System Testing Thread Group 1-1,text,true,,380,207,1,1,http://localhost:3000/api/flights?origin=CGK&destination=XYZ,3,0,0
+1790658169885,3,TC03 - [Boundary] Missing Parameter (No Destination),400,Bad Request,SkyPass System Testing Thread Group 1-1,text,true,,434,191,1,1,http://localhost:3000/api/flights?origin=CGK,3,0,1
+1790658169891,6,TC04 - [Inventory] Retrieve Cabin Seat Map,200,OK,SkyPass System Testing Thread Group 1-1,text,true,,2964,193,1,1,http://localhost:3000/api/flights/AW-101/seats,6,0,1
+1790658169944,4,TC05 - [Resource] Seat Map for Non-Existent Flight (AW-999),404,Not Found,SkyPass System Testing Thread Group 1-1,text,true,,434,193,1,1,http://localhost:3000/api/flights/AW-999/seats,4,0,2
+1790658169951,9,TC06 - [E2E Booking] Create Passenger Booking,201,Created,SkyPass System Testing Thread Group 1-1,text,true,,738,353,1,1,http://localhost:3000/api/bookings,8,0,2
+1790658169962,4,TC07 - [Concurrency] Double Booking Seat Collision,409,Conflict,SkyPass System Testing Thread Group 1-1,text,true,,422,355,1,1,http://localhost:3000/api/bookings,4,0,1
+1790658169967,4,TC08 - [Validation] Malformed Email Format,400,Bad Request,SkyPass System Testing Thread Group 1-1,text,true,,421,337,1,1,http://localhost:3000/api/bookings,4,0,2
+1790658169972,4,TC09 - [Boundary] Out-of-Bounds Physical Seat (99Z),400,Bad Request,SkyPass System Testing Thread Group 1-1,text,true,,453,350,1,1,http://localhost:3000/api/bookings,4,0,2
+1790658169977,3,TC10 - [Data Integrity] Retrieve Booking by PNR,200,OK,SkyPass System Testing Thread Group 1-1,text,true,,733,188,1,1,http://localhost:3000/api/bookings/SKK4H6,3,0,1
+1790658169982,5,TC11 - [Boundary] Query Non-Existent PNR (FAKEXX),404,Not Found,SkyPass System Testing Thread Group 1-1,text,true,,432,188,1,1,http://localhost:3000/api/bookings/FAKEXX,5,0,1
+1790658169989,4,TC12 - [E2E Check-In] Execute Web Check-In,200,OK,SkyPass System Testing Thread Group 1-1,text,true,,699,262,1,1,http://localhost:3000/api/check-in,4,0,1
+1790658169995,4,TC13 - [State Machine] Duplicate Check-In Attempt,400,Bad Request,SkyPass System Testing Thread Group 1-1,text,true,,458,262,1,1,http://localhost:3000/api/check-in,4,0,1
+1790658170000,5,TC14 - [Security Auth] Check-In Email Mismatch,403,Forbidden,SkyPass System Testing Thread Group 1-1,text,true,,471,258,1,1,http://localhost:3000/api/check-in,5,0,2
+1790658170006,4,TC15 - [State Rollback] Cancel Booking & Verify Seat Restored,200,OK,SkyPass System Testing Thread Group 1-1,text,true,,509,215,1,1,http://localhost:3000/api/bookings/SKK4H6/cancel,4,0,1
