@@ -1,0 +1,474 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SkyPass Airlines API",
+    "version": "1.0.0",
+    "description": "Dokumentasi REST API Resmi SkyPass Airlines untuk Reservasi Penerbangan, Denah Kursi Kabin, Web Check-In, dan Penerbitan Boarding Pass.",
+    "contact": {
+      "name": "SkyPass Engineering Team"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Development Server"
+    }
+  ],
+  "tags": [
+    { "name": "System", "description": "Status sistem & reset database" },
+    { "name": "Flights", "description": "Pencarian jadwal penerbangan & denah kursi kabin" },
+    { "name": "Bookings", "description": "Manajemen pemesanan tiket penumpang & pembatalan" },
+    { "name": "Check-In", "description": "Web check-in mandiri & penerbitan boarding pass" }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health Check Sistem",
+        "description": "Memeriksa status aktif server SkyPass Airlines.",
+        "tags": ["System"],
+        "responses": {
+          "200": {
+            "description": "Sistem aktif dan beroperasi normal",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "UP" },
+                    "system": { "type": "string", "example": "SkyPass Airlines" },
+                    "timestamp": { "type": "string", "example": "2026-10-02T13:30:00.000Z" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/system/reset": {
+      "post": {
+        "summary": "Reset Database ke Seed State",
+        "description": "Mereset data penerbangan, kursi, booking, dan boarding pass kembali ke kondisi awal (idempoten untuk kebutuhan pengujian).",
+        "tags": ["System"],
+        "responses": {
+          "200": {
+            "description": "Database berhasil direset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Database successfully reset to seed state" },
+                    "timestamp": { "type": "string", "example": "2026-10-02T13:30:00.000Z" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/flights": {
+      "get": {
+        "summary": "Cari Jadwal Penerbangan",
+        "description": "Mencari penerbangan aktif berdasarkan kota asal (origin) dan tujuan (destination).",
+        "tags": ["Flights"],
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "required": true,
+            "description": "Kode bandara asal (contoh: CGK, SUB, DPS, JOG, KNO, UPG)",
+            "schema": { "type": "string", "example": "CGK" }
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "required": true,
+            "description": "Kode bandara tujuan (contoh: DPS, CGK, SUB, JOG, KNO, UPG)",
+            "schema": { "type": "string", "example": "DPS" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Daftar jadwal penerbangan yang sesuai kriteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Flight"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parameter origin atau destination tidak disertakan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/flights/{flightNumber}/seats": {
+      "get": {
+        "summary": "Ambil Denah Kursi Kabin",
+        "description": "Mengambil susunan 30 kursi pesawat (baris 1-5, kolom A-F) beserta status ketersediaannya.",
+        "tags": ["Flights"],
+        "parameters": [
+          {
+            "name": "flightNumber",
+            "in": "path",
+            "required": true,
+            "description": "Nomor penerbangan (contoh: AW-101)",
+            "schema": { "type": "string", "example": "AW-101" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Denah kursi penerbangan berhasil diambil",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Seat"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nomor penerbangan tidak ditemukan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bookings": {
+      "post": {
+        "summary": "Buat Reservasi Tiket Baru",
+        "description": "Membuat reservasi tiket penerbangan dan menerbitkan kode PNR unik (6 karakter).",
+        "tags": ["Bookings"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["flightNumber", "passengerName", "passengerEmail", "seatNumber"],
+                "properties": {
+                  "flightNumber": { "type": "string", "example": "AW-101" },
+                  "passengerName": { "type": "string", "example": "Budi Santoso" },
+                  "passengerEmail": { "type": "string", "example": "budi.santoso@example.com" },
+                  "passengerPassport": { "type": "string", "example": "A12345678" },
+                  "seatNumber": { "type": "string", "example": "1A" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Reservasi berhasil dibuat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Field input tidak lengkap, format email tidak valid, atau nomor kursi di luar batas kabin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Konflik: Kursi sudah dipesan oleh penumpang lain (Collision / Double-Booking)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bookings/{pnr}": {
+      "get": {
+        "summary": "Ambil Data Reservasi via PNR",
+        "description": "Mengambil detail reservasi tiket menggunakan kode PNR 6 karakter unik.",
+        "tags": ["Bookings"],
+        "parameters": [
+          {
+            "name": "pnr",
+            "in": "path",
+            "required": true,
+            "description": "Kode PNR resmi (contoh: SKK4H6)",
+            "schema": { "type": "string", "example": "SKK4H6" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detail data reservasi ditemukan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kode PNR tidak ditemukan di sistem",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bookings/{pnr}/cancel": {
+      "post": {
+        "summary": "Batalkan Reservasi Tiket",
+        "description": "Membatalkan pemesanan tiket aktif, mengubah status menjadi CANCELLED, dan mengembalikan kursi ke status available.",
+        "tags": ["Bookings"],
+        "parameters": [
+          {
+            "name": "pnr",
+            "in": "path",
+            "required": true,
+            "description": "Kode PNR yang ingin dibatalkan",
+            "schema": { "type": "string", "example": "SKK4H6" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reservasi berhasil dibatalkan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Booking SKK4H6 cancelled successfully" },
+                    "booking": { "$ref": "#/components/schemas/Booking" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Reservasi sudah dibatalkan sebelumnya",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kode PNR tidak ditemukan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/check-in": {
+      "post": {
+        "summary": "Eksekusi Web Check-In Mandiri",
+        "description": "Melakukan check-in online dengan validasi PNR dan verifikasi kecocokan email penumpang, lalu menerbitkan Digital Boarding Pass.",
+        "tags": ["Check-In"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["pnr", "passengerEmail"],
+                "properties": {
+                  "pnr": { "type": "string", "example": "SKK4H6" },
+                  "passengerEmail": { "type": "string", "example": "budi.santoso@example.com" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Check-in berhasil, boarding pass diterbitkan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardingPass"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Tiket sudah di-check-in sebelumnya (Duplicate Check-In)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Email verifikasi tidak cocok dengan data pemesan (Security Authorization)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Kode PNR tidak ditemukan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/boarding-pass/{pnr}": {
+      "get": {
+        "summary": "Ambil Data Digital Boarding Pass",
+        "description": "Mengambil dokumen boarding pass resmi yang telah diterbitkan untuk kode PNR tertentu.",
+        "tags": ["Check-In"],
+        "parameters": [
+          {
+            "name": "pnr",
+            "in": "path",
+            "required": true,
+            "description": "Kode PNR penumpang yang telah check-in",
+            "schema": { "type": "string", "example": "SKK4H6" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data boarding pass ditemukan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardingPass"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Boarding pass belum diterbitkan atau PNR tidak ditemukan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Flight": {
+        "type": "object",
+        "properties": {
+          "flightNumber": { "type": "string", "example": "AW-101" },
+          "origin": { "type": "string", "example": "CGK" },
+          "destination": { "type": "string", "example": "DPS" },
+          "originCity": { "type": "string", "example": "Jakarta" },
+          "destinationCity": { "type": "string", "example": "Bali (Denpasar)" },
+          "departureTime": { "type": "string", "example": "06:30" },
+          "arrivalTime": { "type": "string", "example": "09:20" },
+          "duration": { "type": "string", "example": "1j 50m" },
+          "aircraft": { "type": "string", "example": "Boeing 737-800" },
+          "price": { "type": "number", "example": 1250000 },
+          "availableSeats": { "type": "integer", "example": 30 }
+        }
+      },
+      "Seat": {
+        "type": "object",
+        "properties": {
+          "seatNumber": { "type": "string", "example": "1A" },
+          "row": { "type": "integer", "example": 1 },
+          "column": { "type": "string", "example": "A" },
+          "type": { "type": "string", "example": "Window" },
+          "status": { "type": "string", "enum": ["available", "reserved", "checked-in"], "example": "available" }
+        }
+      },
+      "Booking": {
+        "type": "object",
+        "properties": {
+          "pnr": { "type": "string", "example": "SKK4H6" },
+          "flightNumber": { "type": "string", "example": "AW-101" },
+          "passengerName": { "type": "string", "example": "Budi Santoso" },
+          "passengerEmail": { "type": "string", "example": "budi.santoso@example.com" },
+          "passengerPassport": { "type": "string", "example": "A12345678" },
+          "seatNumber": { "type": "string", "example": "1A" },
+          "status": { "type": "string", "enum": ["CONFIRMED", "CHECKED_IN", "CANCELLED"], "example": "CONFIRMED" },
+          "createdAt": { "type": "string", "example": "2026-10-02T13:30:00.000Z" }
+        }
+      },
+      "BoardingPass": {
+        "type": "object",
+        "properties": {
+          "boardingPassId": { "type": "string", "example": "BP-SKK4H6-1A" },
+          "pnr": { "type": "string", "example": "SKK4H6" },
+          "passengerName": { "type": "string", "example": "Budi Santoso" },
+          "flightNumber": { "type": "string", "example": "AW-101" },
+          "origin": { "type": "string", "example": "CGK" },
+          "destination": { "type": "string", "example": "DPS" },
+          "seatNumber": { "type": "string", "example": "1A" },
+          "gate": { "type": "string", "example": "G3" },
+          "boardingTime": { "type": "string", "example": "06:00" },
+          "issuedAt": { "type": "string", "example": "2026-10-02T13:35:00.000Z" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "example": "Invalid email format" }
+        }
+      }
+    }
+  }
+}

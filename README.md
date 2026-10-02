@@ -45,6 +45,7 @@ Server akan aktif di:
 - **Portal Reservasi**: [http://localhost:3000](http://localhost:3000)
 - **Check-In Mandiri**: [http://localhost:3000/checkin.html](http://localhost:3000/checkin.html)
 - **Health Check API**: [http://localhost:3000/api/health](http://localhost:3000/api/health)
+- **Swagger API Docs**: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
 
 ### 3. Menjalankan Pengujian Otomatis (15 Test Cases):
 ```bash

@@ -18,6 +18,7 @@
   "author": "SkyPass Team",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "swagger-ui-express": "^5.0.1"
   }
 }

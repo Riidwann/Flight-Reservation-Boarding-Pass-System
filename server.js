@@ -6,6 +6,7 @@ const server = app.listen(PORT, () => {
   console.log(`=======================================================`);
   console.log(`  ✈️  SkyPass Airlines Server is running!`);
   console.log(`  🌐  Web Portal: http://localhost:${PORT}`);
+  console.log(`  📖  Swagger UI: http://localhost:${PORT}/api-docs`);
   console.log(`  📊  Health API: http://localhost:${PORT}/api/health`);
   console.log(`  🧪  Ready for Apache JMeter System Testing`);
   console.log(`=======================================================`);
